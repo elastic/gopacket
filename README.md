@@ -1,5 +1,7 @@
 # GoPacket
 
+**NOTE**: The [`beats` branch](https://github.com/elastic/gopacket/tree/beats) has changes that are used in the Elastic Beats repository but are not yet merged upstream.
+
 This library provides packet decoding capabilities for Go.
 See [godoc](https://godoc.org/github.com/google/gopacket) for more details.
 
