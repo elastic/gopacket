@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [ beats ]
+  pull_request:
+    branches: [ beats ]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version: [1.16.x, 1.17.x]
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Install Linux packages
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -qq libpcap-dev
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Test
+      run: |
+        go test ./bytediff
+        go test ./defrag/lcmdefrag
+        go test ./dumpcommand
+        go test ./ip4defrag
+        go test ./layers
+        go test ./macs
+        go test ./pcap
+        go test ./pcap/gopacket_benchmark
+        go test ./pcapgo
+        go test ./reassembly
+        go test ./tcpassembly
+        go test ./tcpassembly/tcpreader
+        # go test ./pfring
+
+    - name: Test Race
+      run: |
+        go test -race ./bytediff
+        go test -race ./defrag/lcmdefrag
+        go test -race ./dumpcommand
+        go test -race ./ip4defrag
+        go test -race ./layers
+        go test -race ./macs
+        go test -race ./pcap
+        go test -race ./pcap/gopacket_benchmark
+        go test -race ./pcapgo
+        go test -race ./reassembly
+        go test -race ./tcpassembly
+        go test -race ./tcpassembly/tcpreader
+        # go test -race ./pfring
+
+    - name: Test Linux
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        go test ./afpacket
+        sudo $(which go) test ./routing
+
+    - name: Test Linux Race
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        go test -race ./afpacket
+        sudo $(which go) test -race ./routing
+
+    - name: Test MacOS
+      if: matrix.os == 'macos-latest'
+      run: |
+        go test ./bsdbpf
+
+    - name: Test MacOS Race
+      if: matrix.os == 'macos-latest'
+      run: |
+        go test -race ./bsdbpf

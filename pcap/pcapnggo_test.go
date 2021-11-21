@@ -10,6 +10,7 @@ import (
 	"bytes"
 	"io/ioutil"
 	"reflect"
+	"runtime"
 	"testing"
 	"time"
 
@@ -19,6 +20,10 @@ import (
 )
 
 func TestPCAPGoNgWrite(t *testing.T) {
+	if runtime.GOOS == "darwin" {
+		t.Skip("Reading PCAPNG files fails on MacOS")
+	}
+
 	f, err := ioutil.TempFile("", "pcapnggo")
 	if err != nil {
 		t.Fatal(err)
