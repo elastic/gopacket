@@ -252,6 +252,68 @@ func LoadWinPCAP() error {
 	return nil
 }
 
+// UnloadWinPCAP attempts to unload the wpcap DLL.
+func UnloadWinPCAP() error {
+	if wpcapHandle == 0 {
+		return nil
+	}
+	err := windows.FreeLibrary(wpcapHandle)
+	if err != nil {
+		return fmt.Errorf("couldn't unload wpcap.dll")
+	}
+
+	wpcapHandle = 0
+	pcapStrerrorPtr = 0
+	pcapStatustostrPtr = 0
+	pcapOpenLivePtr = 0
+	pcapOpenOfflinePtr = 0
+	pcapClosePtr = 0
+	pcapGeterrPtr = 0
+	pcapStatsPtr = 0
+	pcapCompilePtr = 0
+	pcapFreecodePtr = 0
+	pcapLookupnetPtr = 0
+	pcapOfflineFilterPtr = 0
+	pcapSetfilterPtr = 0
+	pcapListDatalinksPtr = 0
+	pcapFreeDatalinksPtr = 0
+	pcapDatalinkValToNamePtr = 0
+	pcapDatalinkValToDescriptionPtr = 0
+	pcapOpenDeadPtr = 0
+	pcapNextExPtr = 0
+	pcapDatalinkPtr = 0
+	pcapSetDatalinkPtr = 0
+	pcapDatalinkNameToValPtr = 0
+	pcapLibVersionPtr = 0
+	pcapFreealldevsPtr = 0
+	pcapFindalldevsPtr = 0
+	pcapSendpacketPtr = 0
+	pcapSetdirectionPtr = 0
+	pcapSnapshotPtr = 0
+	pcapTstampTypeValToNamePtr = 0
+	pcapTstampTypeNameToValPtr = 0
+	pcapListTstampTypesPtr = 0
+	pcapFreeTstampTypesPtr = 0
+	pcapSetTstampTypePtr = 0
+	pcapGetTstampPrecisionPtr = 0
+	pcapSetTstampPrecisionPtr = 0
+	pcapOpenOfflineWithTstampPrecisionPtr = 0
+	pcapHOpenOfflineWithTstampPrecisionPtr = 0
+	pcapActivatePtr = 0
+	pcapCreatePtr = 0
+	pcapSetSnaplenPtr = 0
+	pcapSetPromiscPtr = 0
+	pcapSetTimeoutPtr = 0
+	pcapCanSetRfmonPtr = 0
+	pcapSetRfmonPtr = 0
+	pcapSetBufferSizePtr = 0
+	pcapSetImmediateModePtr = 0
+	pcapHopenOfflinePtr = 0
+
+	pcapLoaded = false
+	return nil
+}
+
 func (h *pcapPkthdr) getSec() int64 {
 	return int64(h.Ts.Sec)
 }
