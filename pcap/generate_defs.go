@@ -4,6 +4,7 @@
 // that can be found in the LICENSE file in the root of the source
 // tree.
 
+//go:build ignore
 // +build ignore
 
 package main
@@ -97,7 +98,7 @@ func main() {
 		log.Fatalf("Couldn't close temporary source file %s: %s", infile.Name(), err)
 	}
 
-	archs := []string{"386", "amd64"}
+	archs := []string{"386", "amd64", "arm", "arm64"}
 	for _, arch := range archs {
 		env := append(os.Environ(), "GOARCH="+arch)
 		cmd := exec.Command("go", "tool", "cgo", "-godefs", "--", "-I", *includes, infile.Name())
